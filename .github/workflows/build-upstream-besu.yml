@@ -4,12 +4,8 @@ on:
   push:
     branches:
       - main
-      - workflow
     paths:
       - 'version.env'
-
-permissions:
-  contents: write
 
 jobs:
   build:
@@ -55,6 +51,8 @@ jobs:
 
       # Create release tag and attach the distribution
       - name: GH Linea Besu Release
+        permissions:
+          contents: write
         id: release
         uses: softprops/action-gh-release@v2.2.1
         with:
