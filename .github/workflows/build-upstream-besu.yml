@@ -46,17 +46,25 @@ jobs:
         working-directory: ./linea-besu
         run: ./gradlew -Prelease.releaseVersion=${{ steps.dotenv.outputs.linea_besu_version }} -Pversion=${{ steps.dotenv.outputs.linea_besu_version }} distTar
 
+      - name: Generate Checksum
+        uses: jmgilman/actions-generate-checksum@v1.0.1
+        with:
+          patterns: ./linea-besu/build/distributions/*.tar.gz
+
       # Create release tag and attach the distribution
       - name: GH Linea Besu Release
         id: release
         uses: softprops/action-gh-release@v2.2.1
         with:
-          files: ./linea-besu/build/distributions/besu-${{ steps.dotenv.outputs.linea_besu_version }}.tar.gz
+          files: |
+            ./linea-besu/build/distributions/besu-${{ steps.dotenv.outputs.linea_besu_version }}.tar.gz
+            checksum.txt
           tag_name: ${{ steps.dotenv.outputs.linea_besu_version }}
           body: |
-            Linea Besu Version: ${{ steps.dotenv.outputs.linea_besu_version }}
-            Upstream Besu Version: ${{ steps.dotenv.outputs.upstream_besu_ref }}
+            **Linea Besu Version**: `${{ steps.dotenv.outputs.linea_besu_version }}`
+            **Upstream Besu Version**: `${{ steps.dotenv.outputs.upstream_besu_ref }}`
           draft: false
           prerelease: false
+          preserve_order: true
 
       # TODO: JFrog Artifactory Publish
