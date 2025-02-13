@@ -5,8 +5,9 @@ on:
     branches:
       - main
       - workflow
-    paths:
-      - 'version.env'
+    # enable following once we are ready to trigger release when this file is changed
+    # paths:
+    #  - 'version.env'
 
 jobs:
   build:
