@@ -53,7 +53,6 @@ jobs:
         with:
           files: ./linea-besu/build/distributions/besu-${{ steps.dotenv.outputs.linea_besu_version }}.tar.gz
           tag_name: ${{ steps.dotenv.outputs.linea_besu_version }}
-          release_name: ${{ steps.dotenv.outputs.linea_besu_version }}
           body: ${{ steps.dotenv.outputs.linea_besu_version }}
           draft: false
           prerelease: false
