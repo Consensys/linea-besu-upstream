@@ -9,6 +9,9 @@ on:
     # paths:
     #  - 'version.env'
 
+permissions:
+  contents: write
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -44,15 +47,16 @@ jobs:
         working-directory: ./linea-besu
         run: ./gradlew -Prelease.releaseVersion=${{ steps.dotenv.outputs.linea_besu_version }} -Pversion=${{ steps.dotenv.outputs.linea_besu_version }} distTar
 
-      - name: Upload Linea Besu Distribution
-        id: artifact-upload-step
-        uses: actions/upload-artifact@v4
+      # Create release tag and attach the distribution
+      - name: Release Linea Besu distribution
+        id: release
+        uses: softprops/action-gh-release@2.2.1
         with:
-          name: linea-besu-dist
-          path: ./linea-besu/build/distributions/besu-${{ steps.dotenv.outputs.linea_besu_version }}.tar.gz
-          if-no-files-found: error
-          retention-days: 1
-          compression-level: 0 # no compression required since its already compressed
-      # TODO: JFrog Artifactory Publish
+          files: ./linea-besu/build/distributions/besu-${{ steps.dotenv.outputs.linea_besu_version }}.tar.gz
+          tag_name: ${{ steps.dotenv.outputs.linea_besu_version }}
+          release_name: ${{ steps.dotenv.outputs.linea_besu_version }}
+          body: ${{ steps.dotenv.outputs.linea_besu_version }}
+          draft: false
+          prerelease: false
 
-      # TODO: Create release tag and attach the distribution
+      # TODO: JFrog Artifactory Publish
