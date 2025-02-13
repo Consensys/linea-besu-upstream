@@ -12,12 +12,6 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-    strategy:
-      fail-fast: false
-      matrix:
-        platform:
-          - linux/amd64
-          - linux/arm64
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -46,9 +40,19 @@ jobs:
       - name: Setup Gradle
         uses: gradle/actions/setup-gradle@v4
 
-      # TODO: Read project version from property file
       - name: Build Linea Besu
         working-directory: ./linea-besu
-        run: ./gradlew distTar
+        run: ./gradlew -Prelease.releaseVersion=${{ steps.dotenv.outputs.linea_besu_version }} -Pversion=${{ steps.dotenv.outputs.linea_besu_version }} distTar
 
-      # TODO: Attach the build output as an artifact
+      - name: Upload Linea Besu Distribution
+        id: artifact-upload-step
+        uses: actions/upload-artifact@v4
+        with:
+          name: linea-besu-dist
+          path: ./linea-besu/build/distributions/besu-${{ steps.dotenv.outputs.linea_besu_version }}.tar.gz
+          if-no-files-found: error
+          retention-days: 1
+          compression-level: 0 # no compression required since its already compressed
+      # TODO: JFrog Artifactory Publish
+
+      # TODO: Create release tag and attach the distribution
