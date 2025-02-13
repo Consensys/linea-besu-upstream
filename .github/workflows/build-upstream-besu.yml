@@ -1,0 +1,44 @@
+name: Build Upstream Besu
+
+on:
+  push:
+    branches:
+      - main
+      - workflow
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        platform:
+          - linux/amd64
+          - linux/arm64
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      # TODO: Read ref from property file
+      - name: Checkout Besu repository
+        uses: actions/checkout@v4
+        with:
+          repository: hyperledger/besu
+          ref: main
+          path: linea-besu
+
+      - name: Setup Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: 21
+
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v4
+
+      # TODO: Read project version from property file
+      - name: Build Linea Besu
+        working-directory: ./linea-besu
+        run: ./gradlew distTar
+
+      # TODO: Attach the build output as an artifact
