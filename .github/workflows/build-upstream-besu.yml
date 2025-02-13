@@ -23,18 +23,18 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Dotenv Action
+        id: dotenv
         uses: falti/dotenv-action@v1.1.4
         with:
           path: version.env
           keys-case: lower
           log-variables: true
 
-      # TODO: Read ref from property file
       - name: Checkout Besu repository
         uses: actions/checkout@v4
         with:
           repository: hyperledger/besu
-          ref: main
+          ref: ${{ steps.dotenv.outputs.upstream_besu_ref }}
           path: linea-besu
 
       - name: Setup Java
