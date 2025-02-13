@@ -5,6 +5,8 @@ on:
     branches:
       - main
       - workflow
+    paths:
+      - 'version.env'
 
 jobs:
   build:
@@ -35,6 +37,12 @@ jobs:
 
       - name: Setup Gradle
         uses: gradle/actions/setup-gradle@v4
+
+      - name: Dotenv Action
+        uses: falti/dotenv-action@v1.1.4
+        with:
+          path: version.env
+          keys-case: lower
 
       # TODO: Read project version from property file
       - name: Build Linea Besu
