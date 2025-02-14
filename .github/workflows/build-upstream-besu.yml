@@ -88,6 +88,7 @@ jobs:
       # Publish to Artifactory
       - name: Publish Artifactory
         id: artifactory
+        working-directory: ./linea-besu
         run: ./gradlew -Prelease.releaseVersion=${{ steps.dotenv.outputs.linea_besu_version }} -Pversion=${{ steps.dotenv.outputs.linea_besu_version }} artifactoryPublish
         env:
           ARTIFACTORY_USER: ${{ steps.jfrog.outputs.oidc-user }}
