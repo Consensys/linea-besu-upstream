@@ -94,4 +94,4 @@ jobs:
           ARTIFACTORY_USER: ${{ steps.jfrog.outputs.oidc-user }}
           ARTIFACTORY_KEY: ${{ steps.jfrog.outputs.oidc-token }}
           ARTIFACTORY_ORG: 'artifactory'
-          ARTIFACTORY_REPO: 'linea-besu-maven'
+          ARTIFACTORY_REPO: 'maven-local'
