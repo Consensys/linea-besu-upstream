@@ -54,32 +54,18 @@ jobs:
           for file in *.tar.gz; do
            shasum -a 256 "$file" > "$file.sha256"
           done
-          
-      # JFrog Artifactory Authentication
-      - name: Authneticate JFrog
-        id: jfrog
-        uses: jfrog/setup-jfrog-cli@v4
-        env:
-          JF_URL: "https://consensys.jfrog.io"
-        with:
-          oidc-provider-name: 'github'
-          oidc-audience: ''
 
-      # temporary fix till upstream gradle file is fixed
-      - name: Replace contextUrl in build.gradle
-        run: |
-          sed -i 's|contextUrl = "https://hyperledger.jfrog.io/${artifactoryOrg}"|contextUrl = "https://consensys.jfrog.io/${artifactoryOrg}"|g' linea-besu/build.gradle
+      - name: Modify build.gradle for Cloudsmith publish
+        run: java scripts/InjectLines.java ./linea-besu/build.gradle ./linea-besu/platform/build.gradle
 
-      # Publish to Artifactory
-      - name: Publish Artifactory
-        id: artifactory
+      # Publish to Cloudsmith
+      - name: Publish Maven Artifacts To Cloudsmith
+        id: maven
         working-directory: ./linea-besu
-        run: ./gradlew -Prelease.releaseVersion=${{ steps.dotenv.outputs.linea_besu_version }} -Pversion=${{ steps.dotenv.outputs.linea_besu_version }} artifactoryPublish
+        run: ./gradlew -Prelease.releaseVersion=${{ steps.dotenv.outputs.linea_besu_version }} -Pversion=${{ steps.dotenv.outputs.linea_besu_version }} publish
         env:
-          ARTIFACTORY_USER: ${{ steps.jfrog.outputs.oidc-user }}
-          ARTIFACTORY_KEY: ${{ steps.jfrog.outputs.oidc-token }}
-          ARTIFACTORY_ORG: 'artifactory'
-          ARTIFACTORY_REPO: 'maven-local'
+          CLOUDSMITH_USER: ${{ secrets.CLOUDSMITH_USER }}
+          CLOUDSMITH_API_KEY: ${{ secrets.CLOUDSMITH_API_KEY }}
 
       # Create release tag and attach the distribution
       - name: GH Linea Besu Release
