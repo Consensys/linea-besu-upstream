@@ -73,7 +73,7 @@ jobs:
             **Linea Besu Version**: `${{ steps.dotenv.outputs.linea_besu_version }}`
             **Upstream Besu Version**: `${{ steps.dotenv.outputs.upstream_besu_ref }}`
           draft: false
-          prerelease: false
+          prerelease: true
           preserve_order: true
 
 
