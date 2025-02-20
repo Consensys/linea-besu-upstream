@@ -4,7 +4,6 @@ on:
   push:
     branches:
       - main
-      - publish_to_artifactory
     paths:
       - 'version.env'
 
@@ -74,7 +73,8 @@ jobs:
            shasum -a 256 "$file" > "$file.sha256"
           done
 
-      - uses: actions/attest-build-provenance@v2.2.0
+      - name: Attest Build Provenance
+        uses: actions/attest-build-provenance@v2.2.0
         with:
           subject-path: './linea-besu/build/distributions/besu-${{ steps.dotenv.outputs.linea_besu_version }}.tar.gz'
 
