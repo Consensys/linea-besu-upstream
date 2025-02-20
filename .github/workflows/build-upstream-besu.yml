@@ -4,7 +4,6 @@ on:
   push:
     branches:
       - main
-      - publish_to_artifactory
     paths:
       - 'version.env'
 
@@ -26,6 +25,19 @@ jobs:
           path: version.env
           keys-case: lower
           log-variables: true
+
+      - name: tag-exists-action
+        id: check-tag
+        uses: mukunku/tag-exists-action@v1.6.0
+        with:
+          tag: ${{ steps.dotenv.outputs.upstream_besu_ref }}
+
+      - name: Fail if tag exists
+        if: steps.check-tag.outputs.exists == 'true'
+        uses: actions/github-script@v7.0.1
+        with:
+          script: |
+            core.setFailed('Release tag already exists in current repository')
 
       - name: Checkout Besu repository
         uses: actions/checkout@v4
@@ -73,7 +85,7 @@ jobs:
             **Linea Besu Version**: `${{ steps.dotenv.outputs.linea_besu_version }}`
             **Upstream Besu Version**: `${{ steps.dotenv.outputs.upstream_besu_ref }}`
           draft: false
-          prerelease: true
+          prerelease: false
           preserve_order: true
 
 
