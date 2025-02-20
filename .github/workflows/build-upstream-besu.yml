@@ -1,4 +1,4 @@
-name: Build Upstream Besu
+name: Build and Publish Linea Besu from Upstream Besu
 
 on:
   push:
@@ -14,6 +14,7 @@ permissions:
 
 jobs:
   build:
+    environment: publish
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
