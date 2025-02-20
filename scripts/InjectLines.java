@@ -33,13 +33,12 @@ public class InjectLines {
     """;
 
     public static void main(String[] args) {
-        if (args.length != 2) {
-            System.err.println("Usage: java scripts.InjectLines <file1> <file2>");
+        if (args.length != 1) {
+            System.err.println("Usage: java scripts.InjectLines <file>");
             System.exit(1);
         }
 
         injectLines(args[0]);
-        injectLines(args[1]);
     }
 
     private static void injectLines(String filePath) {

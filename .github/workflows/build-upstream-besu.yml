@@ -43,9 +43,15 @@ jobs:
       - name: Setup Gradle
         uses: gradle/actions/setup-gradle@v4
 
-      - name: Build Linea Besu
+      - name: Modify build.gradle for Cloudsmith publish
+        run: java scripts/InjectLines.java ./linea-besu/build.gradle
+
+      - name: Create Linea Besu distribution and publish maven artifacts
         working-directory: ./linea-besu
-        run: ./gradlew -Prelease.releaseVersion=${{ steps.dotenv.outputs.linea_besu_version }} -Pversion=${{ steps.dotenv.outputs.linea_besu_version }} distTar
+        run: ./gradlew -Prelease.releaseVersion=${{ steps.dotenv.outputs.linea_besu_version }} -Pversion=${{ steps.dotenv.outputs.linea_besu_version }} distTar publish
+        env:
+          CLOUDSMITH_USER: ${{ secrets.CLOUDSMITH_USER }}
+          CLOUDSMITH_API_KEY: ${{ secrets.CLOUDSMITH_API_KEY }}
 
       - name: Generate Checksum
         working-directory: ./linea-besu/build/distributions
@@ -53,18 +59,6 @@ jobs:
           for file in *.tar.gz; do
            shasum -a 256 "$file" > "$file.sha256"
           done
-
-      - name: Modify build.gradle for Cloudsmith publish
-        run: java scripts/InjectLines.java ./linea-besu/build.gradle ./linea-besu/platform/build.gradle
-
-      # Publish to Cloudsmith
-      - name: Publish Maven Artifacts To Cloudsmith
-        id: maven
-        working-directory: ./linea-besu
-        run: ./gradlew -Prelease.releaseVersion=${{ steps.dotenv.outputs.linea_besu_version }} -Pversion=${{ steps.dotenv.outputs.linea_besu_version }} publish
-        env:
-          CLOUDSMITH_USER: ${{ secrets.CLOUDSMITH_USER }}
-          CLOUDSMITH_API_KEY: ${{ secrets.CLOUDSMITH_API_KEY }}
 
       # Create release tag and attach the distribution
       - name: GH Linea Besu Release
