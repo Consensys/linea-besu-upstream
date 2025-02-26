@@ -60,6 +60,9 @@ jobs:
       - name: Modify build.gradle for Cloudsmith publish
         run: java scripts/InjectLines.java ./linea-besu/build.gradle
 
+      - name: Copy Linea Config
+        run: cp ./config/*.json ./linea-besu/config/src/main/resources/
+
       - name: Create Linea Besu distribution and publish maven artifacts
         working-directory: ./linea-besu
         run: ./gradlew -Prelease.releaseVersion=${{ steps.dotenv.outputs.linea_besu_version }} -Pversion=${{ steps.dotenv.outputs.linea_besu_version }} distTar publish
