@@ -3,7 +3,7 @@ Github workflows to create and publish upstream Besu build for Linea.
 
 This will replace [Linea-Besu](https://github.com/consensys/linea-besu) fork. The Linea-Besu distribution and maven packages created by this repo will be utilized by:
 - https://github.com/Consensys/linea-besu-package
-- https://github.com/Consensys/linea-sequencer
+- https://github.com/Consensys/linea-monorepo/tree/main/besu-plugins/linea-sequencer
 - https://github.com/Consensys/linea-tracer
 - https://github.com/Consensys/besu-shomei-plugin
 
