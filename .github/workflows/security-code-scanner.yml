@@ -36,14 +36,12 @@ jobs:
         **/*Tests.java
         **/*Test.kt
         **/*Tests.kt
+      # ignoring java as repo doesn't have build information
       languages-config: |
         [
           {
             "language": "java",
-            "build_mode": "manual",
-            "build_command": "./gradlew build",
-            "version": "21",
-            "distribution": "temurin"
+            "ignore": true
           }
         ]
     secrets:
