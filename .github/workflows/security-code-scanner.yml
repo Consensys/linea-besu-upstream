@@ -40,7 +40,7 @@ jobs:
       languages-config: |
         [
           {
-            "language": "java",
+            "language": "java-kotlin",
             "ignore": true
           }
         ]
