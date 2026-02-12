@@ -78,7 +78,7 @@ jobs:
           done
 
       - name: Attest Build Provenance
-        uses: actions/attest-build-provenance@v2.2.0
+        uses: actions/attest-build-provenance@v3.2.0
         with:
           subject-path: './linea-besu/build/distributions/besu-${{ steps.dotenv.outputs.linea_besu_version }}.tar.gz'
 
