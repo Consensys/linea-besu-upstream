@@ -18,7 +18,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: Dotenv Action
         id: dotenv
@@ -42,7 +42,7 @@ jobs:
             core.setFailed('Release tag ${{ steps.dotenv.outputs.linea_besu_version }} already exists in current repository')
 
       - name: Checkout Besu repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
         with:
           repository: hyperledger/besu
           ref: ${{ steps.dotenv.outputs.upstream_besu_ref }}
