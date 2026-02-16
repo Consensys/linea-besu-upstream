@@ -22,7 +22,7 @@ jobs:
 
       - name: Dotenv Action
         id: dotenv
-        uses: falti/dotenv-action@v1.1.4
+        uses: falti/dotenv-action@v1.1.5
         with:
           path: version.env
           keys-case: lower
@@ -30,7 +30,7 @@ jobs:
 
       - name: tag-exists-action
         id: check-tag
-        uses: mukunku/tag-exists-action@v1.6.0
+        uses: mukunku/tag-exists-action@v1.7.0
         with:
           tag: ${{ steps.dotenv.outputs.linea_besu_version }}
 
@@ -85,7 +85,7 @@ jobs:
       # Create release tag and attach the distribution
       - name: GH Linea Besu Release
         id: release
-        uses: softprops/action-gh-release@v2.2.1
+        uses: softprops/action-gh-release@v2.5.0
         with:
           files: |
             ./linea-besu/build/distributions/besu-${{ steps.dotenv.outputs.linea_besu_version }}.tar.gz
