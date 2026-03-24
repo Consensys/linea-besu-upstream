@@ -1,3 +1,6 @@
+# Repository Archived
+Follow the new workflow at https://github.com/Consensys/linea-monorepo/blob/main/docs/linea-besu-package-releases.md
+
 # Linea Besu Upstream Distribution
 Github workflows to create and publish upstream Besu build for Linea.
 
